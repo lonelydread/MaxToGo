@@ -8,7 +8,7 @@ class SurveyManager {
             mood: '',
             weather: '',
             interests: [],
-            city: 'Москва' // по умолчанию
+            city: '' // по умолчанию
         };
         this.init();
     }
@@ -16,9 +16,26 @@ class SurveyManager {
     init() {
         this.bindEvents();
         this.updateProgress();
-        this.detectUserCity();
+        this.setupCitySelect();
     }
 
+    setupCitySelect() {
+        const citySelect = document.getElementById('citySelect');
+        if (citySelect) {
+            // Устанавливаем обработчик изменения выбора города
+            citySelect.addEventListener('change', (e) => {
+                this.userData.city = e.target.value;
+                
+                // Включаем кнопку "Далее" если выбран город
+                const nextBtn = document.querySelector('.survey-card[data-step="2"] .next-card');
+                if (nextBtn) {
+                    nextBtn.disabled = !this.userData.city;
+                }
+                
+                console.log('Selected city:', this.userData.city);
+            });
+        }
+    }
 
     bindEvents() {
         // Start survey button

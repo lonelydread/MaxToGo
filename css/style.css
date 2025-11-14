@@ -2366,3 +2366,88 @@ input:checked+.slider:before {
         }
     }
 }
+
+/* Стили для выбора города с выпадающим списком */
+.city-selection {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.city-select {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e9ecef;
+    border-radius: var(--radius-sm);
+    background: white;
+    font-size: 1rem;
+    color: var(--text);
+    cursor: pointer;
+    appearance: none;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+}
+
+.city-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.city-select:valid {
+    border-color: var(--primary);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.select-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-lighter);
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.city-select:focus + .select-arrow {
+    color: var(--primary);
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Стили для опций в выпадающем списке */
+.city-select option {
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.city-select option:checked {
+    background: var(--primary);
+    color: white;
+}
+
+/* Адаптивность для выбора города */
+@media (max-width: 480px) {
+    .city-select {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .select-arrow {
+        right: 12px;
+    }
+}
+
+/* Анимация для карточки города */
+.survey-card[data-step="2"] {
+    justify-content: flex-start;
+    padding-top: 60px;
+}
+
+.survey-card[data-step="2"] .card-illustration {
+    height: 140px;
+    margin-bottom: 30px;
+}
