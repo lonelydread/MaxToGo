@@ -667,36 +667,9 @@ input:checked+.slider:before {
 }
 
 /* Card 2 (Mood) - смещаем контент вниз */
-.survey-card[data-step="2"] {
-    justify-content: flex-start;
-    padding-top: 70px;
-}
-
-.survey-card[data-step="2"] .card-illustration {
-    height: 140px;
-    margin-bottom: 30px;
-}
-
-.survey-card[data-step="2"] .mood-options {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    width: 100%;
-}
-
-.survey-card[data-step="2"] .mood-option {
-    padding: 15px 10px;
-    border-radius: 12px;
-}
-
-.survey-card[data-step="2"] .mood-icon {
-    font-size: 2rem;
-    margin-bottom: 8px;
-}
-
-/* Card 3 (Weather) - смещаем контент вниз */
 .survey-card[data-step="3"] {
     justify-content: flex-start;
-    padding-top: 80px;
+    padding-top: 70px;
 }
 
 .survey-card[data-step="3"] .card-illustration {
@@ -704,18 +677,45 @@ input:checked+.slider:before {
     margin-bottom: 30px;
 }
 
-.survey-card[data-step="3"] .weather-options {
+.survey-card[data-step="3"] .mood-options {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     width: 100%;
 }
 
-.survey-card[data-step="3"] .weather-option {
+.survey-card[data-step="3"] .mood-option {
     padding: 15px 10px;
     border-radius: 12px;
 }
 
-.survey-card[data-step="3"] .weather-icon {
+.survey-card[data-step="3"] .mood-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+/* Card 3 (Weather) - смещаем контент вниз */
+.survey-card[data-step="4"] {
+    justify-content: flex-start;
+    padding-top: 80px;
+}
+
+.survey-card[data-step="4"] .card-illustration {
+    height: 140px;
+    margin-bottom: 30px;
+}
+
+.survey-card[data-step="4"] .weather-options {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+}
+
+.survey-card[data-step="4"] .weather-option {
+    padding: 15px 10px;
+    border-radius: 12px;
+}
+
+.survey-card[data-step="4"] .weather-icon {
     font-size: 2rem;
     margin-bottom: 8px;
 }
@@ -762,8 +762,9 @@ input:checked+.slider:before {
 .interests-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
+    margin-top: 100px;
 }
 
 .interest-option {
@@ -2119,7 +2120,22 @@ input:checked+.slider:before {
     }
 
     .interests-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .interest-option {
+        padding: 12px 6px;
+        min-height: 70px;
+    }
+
+    .interest-option {
+        padding: 12px 6px;
+        min-height: 70px;
+    }
+
+    .interest-option {
+        padding: 12px 6px;
+        min-height: 70px;
     }
 
     /* Адаптивность для рекомендаций */
@@ -2413,7 +2429,7 @@ input:checked+.slider:before {
     transition: var(--transition);
 }
 
-.city-select:focus + .select-arrow {
+.city-select:focus+.select-arrow {
     color: var(--primary);
     transform: translateY(-50%) rotate(180deg);
 }
@@ -2435,7 +2451,7 @@ input:checked+.slider:before {
         padding: 12px 16px;
         font-size: 0.9rem;
     }
-    
+
     .select-arrow {
         right: 12px;
     }
