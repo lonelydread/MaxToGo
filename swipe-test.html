@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Помогите нам узнать ваши предпочтения - MaxToGo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="swipe-test-page">
+    <div class="swipe-test-container">
+        <div class="swipe-test-header">
+            <h1>Помогите нам узнать ваши предпочтения</h1>
+            <p>Свайпайте карточки: вправо 👍 если нравится, влево 👎 если не нравится</p>
+            <div class="swipe-progress">
+                <span class="swipe-count" id="swipeCount">1/15</span>
+                <div class="swipe-progress-bar">
+                    <div class="swipe-progress-fill" id="swipeProgressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swipe-container" id="swipeContainer">
+            <!-- Карточки будут генерироваться динамически через JavaScript -->
+        </div>
+
+        <div class="swipe-actions">
+            <button class="swipe-btn dislike-btn" id="dislikeBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <button class="swipe-btn like-btn" id="likeBtn">
+                <i class="fas fa-heart"></i>
+            </button>
+        </div>
+
+    </div>
+
+    <script src="js/swipe-test.js"></script>
+</body>
+</html>
