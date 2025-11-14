@@ -2,7 +2,7 @@
 class SurveyManager {
     constructor() {
         this.currentStep = 1;
-        this.totalSteps = 5;
+        this.totalSteps = 6;
         this.userData = {
             name: 'Гость',
             mood: '',
