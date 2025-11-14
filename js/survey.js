@@ -175,6 +175,7 @@ class SurveyManager {
 
         const requestData = {
             city: this.userData.city,
+            favoriteTags: this.userData.tags,
             favoriteCategories: this.userData.interests,
             preferredMood: this.userData.mood,
             weather: this.userData.weather

@@ -3,6 +3,7 @@ class SwipeTest {
         this.cards = []; // Массив карточек из JSON
         this.currentIndex = 0;
         this.results = []; // Результаты свайпов
+        this.userTags = {};
 
         this.loadCards();
         this.init();
@@ -17,7 +18,6 @@ class SwipeTest {
                 "description": "Уютное место у воды, ароматный кофе и десерты с видом на набережную.",
                 "image_url": "https://example.com/images/cafe_neva.jpg",
                 "tags": {
-                    "food": 1,
                     "indoor": 1,
                     "romantic": 1,
                     "calm": 1,
@@ -86,7 +86,6 @@ class SwipeTest {
                 "image_url": "https://example.com/images/food_festival.jpg",
                 "tags": {
                     "outdoor": 1,
-                    "food": 1,
                     "fun": 1,
                     "cheap": 1,
                     "summer": 1
@@ -207,7 +206,6 @@ class SwipeTest {
                 "image_url": "https://example.com/images/rooftop_dinner.jpg",
                 "tags": {
                     "indoor": 1,
-                    "food": 1,
                     "romantic": 1,
                     "expensive": 1,
                     "evening": 1
@@ -271,7 +269,7 @@ class SwipeTest {
 
         const contentDiv = document.createElement('div');
         contentDiv.className = 'card-content';
-        
+
         // Создаем теги из объекта tags
         const tags = Object.keys(cardData.tags || {});
         const tagsHTML = tags.map(tag => `<span class="tag">${this.formatTag(tag)}</span>`).join('');
@@ -291,7 +289,6 @@ class SwipeTest {
 
     formatTag(tag) {
         const tagMap = {
-            'food': '🍕 Еда',
             'indoor': '🏠 В помещении',
             'outdoor': '🌳 На улице',
             'romantic': '💝 Романтическое',
@@ -317,7 +314,7 @@ class SwipeTest {
             'any_season': '🔄 В любое время года',
             'walk': '🚶 Прогулка'
         };
-        
+
         return tagMap[tag] || tag;
     }
 
@@ -335,17 +332,17 @@ class SwipeTest {
 
         const updateSwipe = (clientX) => {
             if (!isSwiping) return;
-            
+
             currentX = clientX;
             const diff = currentX - startX;
             const rotation = (diff / 10) * (diff > 0 ? 1 : -1);
-            
+
             card.style.transform = `translateX(${diff}px) rotate(${rotation}deg)`;
-            
+
             // Показываем индикаторы
             const likeIndicator = card.querySelector('.like-indicator');
             const dislikeIndicator = card.querySelector('.dislike-indicator');
-            
+
             if (diff > 50) {
                 likeIndicator.classList.add('show');
                 dislikeIndicator.classList.remove('show');
@@ -361,13 +358,13 @@ class SwipeTest {
         const endSwipe = () => {
             if (!isSwiping) return;
             isSwiping = false;
-            
+
             card.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-            
+
             const diff = currentX - startX;
             const likeIndicator = card.querySelector('.like-indicator');
             const dislikeIndicator = card.querySelector('.dislike-indicator');
-            
+
             if (diff > 100) {
                 // Свайп вправо - лайк
                 this.swipeCard('right');
@@ -420,13 +417,16 @@ class SwipeTest {
         if (!card) return;
 
         const cardId = parseInt(card.dataset.cardId);
-        
+        const cardData = this.cards.find(card => card.id === cardId);
+
         // Сохраняем результат
         this.results.push({
             cardId: cardId,
             direction: direction,
             timestamp: Date.now()
         });
+
+        this.updateUserTags(cardData, direction);
 
         // Анимируем уход карточки
         card.classList.add('removing');
@@ -452,23 +452,76 @@ class SwipeTest {
         const progress = (this.currentIndex / this.cards.length) * 100;
         const progressFill = document.getElementById('swipeProgressFill');
         const swipeCount = document.getElementById('swipeCount');
-        
+
         if (progressFill) {
             progressFill.style.width = `${progress}%`;
         }
-        
+
         if (swipeCount) {
             swipeCount.textContent = `${this.currentIndex + 1}/${this.cards.length}`;
         }
     }
 
+    updateUserTags(cardData, direction) {
+        if (direction === 'right') {
+            // Пользователю понравилась карточка - добавляем её теги
+            if (cardData.tags) {
+                Object.keys(cardData.tags).forEach(tag => {
+                    if (cardData.tags[tag] === 1) {
+                        // Увеличиваем вес тега или устанавливаем 1, если его не было
+                        this.userTags[tag] = (this.userTags[tag] || 0) + 1;
+                    }
+                });
+            }
+        } else if (direction === 'left') {
+        // Пользователю не понравилась карточка - уменьшаем вес тегов
+        if (cardData.tags) {
+            Object.keys(cardData.tags).forEach(tag => {
+                if (cardData.tags[tag] === 1) {
+                    // Уменьшаем вес, но не ниже 0
+                    this.userTags[tag] = Math.max(0, (this.userTags[tag] || 0) - 0.5);
+                    
+                    // Если вес стал 0, можно удалить тег (опционально)
+                    if (this.userTags[tag] === 0) {
+                        delete this.userTags[tag];
+                    }
+                }
+            });
+        }
+    }
+}
+
     completeTest() {
         // Сохраняем результаты в localStorage
         localStorage.setItem('swipeTestResults', JSON.stringify(this.results));
         localStorage.setItem('swipeTestCompleted', 'true');
-        
+        localStorage.setItem('userTags', JSON.stringify(this.userTags));
+
+        this.updateUserData();
+
         // Перенаправляем на главную страницу опроса
         window.location.href = 'index.html';
+    }
+
+     updateUserData() {
+        // Получаем существующие данные пользователя или создаем новые
+        let userData = JSON.parse(localStorage.getItem('userData')) || {};
+        
+        // Обновляем теги
+        userData.tags = this.userTags;
+        
+        // Сохраняем обратно
+        localStorage.setItem('userData', JSON.stringify(userData));
+    }
+
+    normalizeTags() {
+        // Можно нормализовать веса тегов от 0 до 1
+        const maxWeight = Math.max(...Object.values(this.userTags));
+        if (maxWeight > 0) {
+            Object.keys(this.userTags).forEach(tag => {
+                this.userTags[tag] = this.userTags[tag] / maxWeight;
+            });
+        }
     }
 }
 
