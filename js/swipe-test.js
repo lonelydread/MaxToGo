@@ -492,10 +492,10 @@ class SwipeTest {
 }
 
     completeTest() {
+        console.log('Completing swipe test, userTags:', this.userTags);
         // Сохраняем результаты в localStorage
         localStorage.setItem('swipeTestResults', JSON.stringify(this.results));
         localStorage.setItem('swipeTestCompleted', 'true');
-        localStorage.setItem('userTags', JSON.stringify(this.userTags));
 
         this.updateUserData();
 

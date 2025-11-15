@@ -6,6 +6,7 @@ class SurveyManager {
         this.userData = {
             name: 'Гость',
             mood: '',
+            tags: {},
             weather: '',
             interests: [],
             city: '' // по умолчанию
@@ -17,6 +18,7 @@ class SurveyManager {
         this.bindEvents();
         this.updateProgress();
         this.setupCitySelect();
+        this.checkSwipeTestCompletion();
     }
 
     setupCitySelect() {
@@ -25,15 +27,23 @@ class SurveyManager {
             // Устанавливаем обработчик изменения выбора города
             citySelect.addEventListener('change', (e) => {
                 this.userData.city = e.target.value;
-                
+
                 // Включаем кнопку "Далее" если выбран город
                 const nextBtn = document.querySelector('.survey-card[data-step="2"] .next-card');
                 if (nextBtn) {
                     nextBtn.disabled = !this.userData.city;
                 }
-                
+
                 console.log('Selected city:', this.userData.city);
             });
+        }
+    }
+
+    checkSwipeTestCompletion() {
+        const swipeCompleted = localStorage.getItem('swipeTestCompleted');
+        if (!swipeCompleted) {
+            // Если свайп-тест не пройден, перенаправляем на него
+            window.location.href = 'swipe-test.html';
         }
     }
 
@@ -171,6 +181,8 @@ class SurveyManager {
     sendRecommendationsRequest() {
         console.log('Starting sendRecommendationsRequest...');
 
+        localStorage.getItem('userData', JSON.stringify(this.userData));
+        console.log('User data loggeed:', this.userData);
         this.showLoadingState();
 
         const requestData = {
@@ -201,7 +213,9 @@ class SurveyManager {
 
                 // Сохраняем и перенаправляем
                 localStorage.setItem('recommendations', JSON.stringify(recommendations));
+
                 window.location.href = 'recommendations.html';
+
             })
             .catch(error => {
                 console.error('Error fetching recommendations:', error);
