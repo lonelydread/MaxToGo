@@ -3,14 +3,7 @@ class SurveyManager {
     constructor() {
         this.currentStep = 1;
         this.totalSteps = 6;
-        this.userData = {
-            name: 'Гость',
-            mood: '',
-            tags: {},
-            weather: '',
-            interests: [],
-            city: '' // по умолчанию
-        };
+        this.userData = this.loadUserDataSafely();
         this.init();
     }
 
@@ -37,6 +30,33 @@ class SurveyManager {
                 console.log('Selected city:', this.userData.city);
             });
         }
+    }
+
+    loadUserDataSafely() {
+        const defaultData = {
+            name: 'Гость',
+            mood: '',
+            weather: '',
+            interests: [],
+            city: '',
+            tags: {}
+        };
+
+        try {
+            const savedData = localStorage.getItem('userData');
+            if (savedData) {
+                const parsed = JSON.parse(savedData);
+                return {
+                    ...defaultData,
+                    ...parsed,
+                    interests: Array.isArray(parsed.interests) ? parsed.interests : defaultData.interests
+                };
+            }
+        } catch (e) {
+            console.error('Error loading userData:', e);
+        }
+
+        return defaultData;
     }
 
     checkSwipeTestCompletion() {

@@ -474,44 +474,55 @@ class SwipeTest {
                 });
             }
         } else if (direction === 'left') {
-        // Пользователю не понравилась карточка - уменьшаем вес тегов
-        if (cardData.tags) {
-            Object.keys(cardData.tags).forEach(tag => {
-                if (cardData.tags[tag] === 1) {
-                    // Уменьшаем вес, но не ниже 0
-                    this.userTags[tag] = Math.max(0, (this.userTags[tag] || 0) - 0.5);
-                    
-                    // Если вес стал 0, можно удалить тег (опционально)
-                    if (this.userTags[tag] === 0) {
-                        delete this.userTags[tag];
+            // Пользователю не понравилась карточка - уменьшаем вес тегов
+            if (cardData.tags) {
+                Object.keys(cardData.tags).forEach(tag => {
+                    if (cardData.tags[tag] === 1) {
+                        // Уменьшаем вес, но не ниже 0
+                        this.userTags[tag] = Math.max(0, (this.userTags[tag] || 0) - 0.5);
+
+                        // Если вес стал 0, можно удалить тег (опционально)
+                        if (this.userTags[tag] === 0) {
+                            delete this.userTags[tag];
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
-}
 
     completeTest() {
+        this.normalizeTags();
         console.log('Completing swipe test, userTags:', this.userTags);
         // Сохраняем результаты в localStorage
+        
         localStorage.setItem('swipeTestResults', JSON.stringify(this.results));
         localStorage.setItem('swipeTestCompleted', 'true');
 
         this.updateUserData();
 
-        // Перенаправляем на главную страницу опроса
-        window.location.href = 'index.html';
+        setTimeout(function () {
+            window.location.href = 'index.html';
+        }, 300);
+
     }
 
-     updateUserData() {
+    updateUserData() {
         // Получаем существующие данные пользователя или создаем новые
         let userData = JSON.parse(localStorage.getItem('userData')) || {};
-        
+
         // Обновляем теги
-        userData.tags = this.userTags;
-        
+        userData = {
+            ...userData, // сохраняем все существующие поля
+            tags: this.userTags // обновляем только теги
+        };
+
         // Сохраняем обратно
         localStorage.setItem('userData', JSON.stringify(userData));
+
+        const savedData = JSON.parse(localStorage.getItem('userData'));
+        console.log('UserData after update:', savedData);
+        console.log('Tags saved successfully:', savedData.tags);
     }
 
     normalizeTags() {
